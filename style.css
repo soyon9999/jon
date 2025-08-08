@@ -748,7 +748,7 @@ body {
 
     /* Hero Banner Adjustments */
     .hero-container {
-        height: 45vh; /* Reduced height for mobile hero section */
+        height: 60vh; /* Increased height for mobile hero section */
         background-position: center; /* Ensure background image is centered */
         background-size: cover; /* Ensure background image covers the container */
         padding: 0;
@@ -757,6 +757,8 @@ body {
         justify-content: center;
         align-items: center;
         text-align: center;
+        width: calc(100% + 30px); /* Account for 15px padding on each side of main-content */
+        margin-left: -15px; /* Pull left to counteract main-content padding */
     }
 
     .hero-banner .overlay {
