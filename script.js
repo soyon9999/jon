@@ -142,6 +142,8 @@ if (cardRow) {
 
   cardRow.addEventListener('mouseenter', stopScrolling);
   cardRow.addEventListener('mouseleave', startScrolling);
+  cardRow.addEventListener('touchstart', stopScrolling); // Add for mobile
+  cardRow.addEventListener('touchend', startScrolling);   // Add for mobile
 
   if (newThisWeekArrow) {
     newThisWeekArrow.addEventListener('mouseenter', stopScrolling);
@@ -201,6 +203,8 @@ if (categoryGrid) {
 
     categoryGrid.addEventListener('mouseenter', stopScrolling);
     categoryGrid.addEventListener('mouseleave', startScrolling);
+    categoryGrid.addEventListener('touchstart', stopScrolling); // Add for mobile
+    categoryGrid.addEventListener('touchend', startScrolling);   // Add for mobile
 
     if (categoryArrow) {
         categoryArrow.addEventListener('mouseenter', stopScrolling);
@@ -242,4 +246,31 @@ document.addEventListener("click", (e) => {
             sidebarOverlay.classList.remove("visible");
         }
     }
+});
+
+document.addEventListener('touchstart', (e) => {
+    const rippleSize = Math.max(window.innerWidth, window.innerHeight) * 0.07; // Base size
+
+    // Main ripple
+    const mainRipple = document.createElement('div');
+    mainRipple.classList.add('touch-ripple', 'main-ripple');
+    document.body.appendChild(mainRipple);
+    mainRipple.style.width = mainRipple.style.height = `${rippleSize}px`;
+    mainRipple.style.left = `${e.touches[0].clientX - rippleSize / 2}px`;
+    mainRipple.style.top = `${e.touches[0].clientY - rippleSize / 2}px`;
+    mainRipple.addEventListener('animationend', () => {
+        mainRipple.remove();
+    });
+
+    // Inner ripple (simulating a splash)
+    const innerRipple = document.createElement('div');
+    innerRipple.classList.add('touch-ripple', 'inner-ripple');
+    document.body.appendChild(innerRipple);
+    const innerRippleSize = rippleSize * 0.7; // Smaller
+    innerRipple.style.width = innerRipple.style.height = `${innerRippleSize}px`;
+    innerRipple.style.left = `${e.touches[0].clientX - innerRippleSize / 2}px`;
+    innerRipple.style.top = `${e.touches[0].clientY - innerRippleSize / 2}px`;
+    innerRipple.addEventListener('animationend', () => {
+        innerRipple.remove();
+    });
 });
