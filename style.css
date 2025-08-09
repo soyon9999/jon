@@ -14,6 +14,7 @@ body {
   background-color: #000;
   color: #fff;
   display: flex;
+  -webkit-tap-highlight-color: transparent; /* Remove blue box on tap */
 }
 
 #sidebar-overlay {
@@ -120,8 +121,8 @@ body {
 }
 
 .arrow img {
-  width: 4vmin;
-  height: 4vmin;
+  width: 5vmin;
+  height: 5vmin;
 }
 
 /* Main Content */
@@ -240,6 +241,7 @@ body {
   cursor: pointer;
   border-radius: 5px;
   font-size: 18px;
+  animation: pulse-play-button 2s infinite alternate; /* Apply the animation */
 }
 
 .trailer-btn {
@@ -260,6 +262,46 @@ body {
 /* Section Title */
 .section {
   margin-top: 40px;
+}
+
+@media (max-width: 480px) {
+    .tv-web-series-card, .most-popular-card {
+        flex: 1 1 100%; /* 1 card per row on very small screens */
+        max-width: 100%;
+    }
+}
+
+.touch-ripple {
+  position: fixed;
+  border-radius: 50%;
+  transform: scale(0);
+  pointer-events: none; /* Allow clicks to pass through */
+  z-index: 9999; /* Ensure it's on top */
+  display: none; /* Hidden by default */
+}
+
+.main-ripple {
+  background-color: rgba(255, 255, 255, 0.4); /* Slightly transparent white */
+  animation: water-drop-main 0.8s ease-out forwards;
+}
+
+.inner-ripple {
+  background-color: rgba(200, 200, 255, 0.6); /* Bluish tint for inner splash */
+  animation: water-drop-inner 0.5s ease-out forwards;
+}
+
+@keyframes water-drop-main {
+  to {
+    transform: scale(1.2); /* Expands more */
+    opacity: 0;
+  }
+}
+
+@keyframes water-drop-inner {
+  to {
+    transform: scale(1);
+    opacity: 0;
+  }
 }
 
 
@@ -391,10 +433,10 @@ body {
   float: right;
   background: none;
   border: none;
-  color: #f33;
+  color: red;
   font-size: 14px;
   cursor: pointer;
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .sidebar-icon {
@@ -647,13 +689,40 @@ body {
   margin-bottom: 20px;
 }
 
+.mobile-divider {
+  display: none;
+}
+
+@keyframes pulse-play-button {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(255, 0, 0, 0.7);
+  }
+  100% {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.9);
+  }
+}
+
+@keyframes animate-gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 /* Mobile Header */
 .mobile-header {
     display: none; /* Hidden by default */
     background-color: #111;
     color: #fff;
     justify-content: space-between;
-    padding: 10px 15px;
+    padding: 5px 15px; /* This controls the height */
     align-items: center;
     position: fixed;
     top: 0;
@@ -706,10 +775,18 @@ body {
     display: block;
     transition: 0.3s;
     text-align: left;
+    opacity: 0; /* Initial state */
+    transform: translateX(-20px); /* Initial state */
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* Add transition for animation */
 }
 
 .mobile-sidebar ul li a:hover {
     background-color: #555;
+}
+
+.mobile-sidebar.open ul li a {
+    opacity: 1;
+    transform: translateX(0);
 }
 
 .mobile-sidebar .genre .genre-list {
@@ -733,11 +810,15 @@ body {
         display: flex;
     }
 
+    .touch-ripple {
+        display: block; /* Show on mobile */
+    }
+
     /* Adjust Main Content for Mobile */
     .main-content {
         margin-left: 0 !important;
         width: 100% !important;
-        padding: 60px 15px 15px 15px; /* Re-introduce horizontal padding */
+        padding: 30px 15px 15px 15px; /* Re-introduce horizontal padding */
     }
 
     .main-content.expanded {
@@ -809,11 +890,28 @@ body {
         border: 1px solid #fff; /* White border for contrast */
     }
 
+    .categories-section {
+        margin-bottom: 30px;
+    }
+
+    .mobile-divider {
+        display: block; /* Make it visible on mobile */
+        height: 10px; /* Example height */
+        background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet); /* Rainbow gradient */
+        background-size: 400% 100%; /* Make the gradient larger than the element */
+        margin: 20px 0; /* Some vertical spacing */
+        border-radius: 5px;
+        box-shadow: 0 0 15px rgba(255, 0, 0, 0.8); /* Glowing effect */
+        animation: animate-gradient 10s ease infinite; /* Apply the animation */
+    }
+
     
 
     /* Card and Grid Adjustments */
     .section h2, .categories-title, .tv-web-series-section h2, .most-popular-section h2 {
         font-size: 20px;
+        margin-bottom: 20px; /* Reverted to original gap for mobile UI */
+        margin-top: 20px;
     }
 
     .card-row, .category-grid {
@@ -839,5 +937,12 @@ body {
         max-width: calc(50% - 10px);
     }
 
-    
+    .tv-web-series-section h2 {
+        margin-bottom: 1px; /* Reduced gap for TV & WEB Series heading only */
+        
+    }
+
+    .new-this-week-arrow {
+        top: 35%;
+    }
 }
